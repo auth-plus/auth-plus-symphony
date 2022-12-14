@@ -1,0 +1,77 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.27.0 (b0ed6a2c9)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: api
+  name: api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: api
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert
+        kompose.version: 1.27.0 (b0ed6a2c9)
+      creationTimestamp: null
+      labels:
+        io.kompose.network/host: "true"
+        io.kompose.service: api
+    spec:
+      containers:
+        - args:
+            - tail
+            - -f
+            - /dev/null
+          env:
+            - name: APP_NAME
+              value: auth-plus-authentication
+            - name: CACHE_HOST
+              value: redis
+            - name: CACHE_PORT
+              value: "6379"
+            - name: DATABASE_DATABASE
+              value: auth
+            - name: DATABASE_HOST
+              value: database
+            - name: DATABASE_PASSWORD
+              value: db_password
+            - name: DATABASE_PORT
+              value: "5432"
+            - name: DATABASE_USER
+              value: root
+            - name: JWT_SECRET
+              value: dPBZ_CSWBApK&7EwL?!_%5dLjTK7An
+            - name: KAFKA_HOST
+              value: kafka
+            - name: KAFKA_PORT
+              value: "29092"
+            - name: LOGSTASH_HOST
+              value: elasticsearch
+            - name: LOGSTASH_PORT
+              value: "5044"
+            - name: NODE_ENV
+              value: development
+            - name: PORT
+              value: "5000"
+          image: api
+          name: api
+          ports:
+            - containerPort: 5000
+          resources: {}
+          volumeMounts:
+            - mountPath: /app
+              name: api-claim0
+      restartPolicy: Always
+      volumes:
+        - name: api-claim0
+          persistentVolumeClaim:
+            claimName: api-claim0
+status: {}
