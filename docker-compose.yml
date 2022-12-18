@@ -1,5 +1,111 @@
 version: '3.9'
 services:
+  authentication:
+    build:
+      context: auth-plus-authentication
+      dockerfile: Dockerfile
+      target: dependency
+    ports:
+      - '5000:5000'
+    command: npm run dev
+    environment:
+      - APP_NAME=auth-plus-authentication
+      - PORT=5000
+      - NODE_ENV=development
+      - JWT_SECRET=dPBZ_CSWBApK&7EwL?!_%5dLjTK7An
+      - DATABASE_HOST=database
+      - DATABASE_USER=root
+      - DATABASE_PASSWORD=db_password
+      - DATABASE_DATABASE=auth
+      - DATABASE_PORT=5432
+      - CACHE_HOST=redis
+      - CACHE_PORT=6379
+      - LOGSTASH_HOST=elasticsearch
+      - LOGSTASH_PORT=5044
+      - KAFKA_HOST=kafka
+      - KAFKA_PORT=29092
+    restart: always
+    networks:
+      - symphony-net
+    depends_on:
+      - database-auth
+      - cache
+
+  billing:
+    build:
+      context: auth-plus-billing
+      dockerfile: Dockerfile
+    ports:
+      - '5002:5002'
+    command: cargo run http
+    environment:
+      - APP_NAME=auth-plus-billling
+      - PORT=5002
+      - RUST_ENV=development
+      - DATABASE_HOST=postgres://root:db_password@database-billing:5433/billing
+      - KAFKA_HOST=kafka:9092
+    restart: always
+    networks:
+      - symphony-net
+    depends_on:
+      - database-billing
+
+  database-auth:
+    image: postgres:15.1
+    restart: always
+    environment:
+      - POSTGRES_PASSWORD=db_password
+      - POSTGRES_USER=root
+      - POSTGRES_DB=auth
+    ports:
+      - '5432:5432'
+    volumes:    
+      - v-database-auth:/var/lib/postgresql/data
+    networks:
+      - symphony-net
+
+  database-billing:
+    image: postgres:15.1
+    restart: always
+    environment:
+      - POSTGRES_PASSWORD=db_password
+      - POSTGRES_USER=root
+      - POSTGRES_DB=billing
+    ports:
+      - '5433:5432'
+    volumes:    
+      - v-database-billing:/var/lib/postgresql/data
+    networks:
+      - symphony-net
+
+  cache:
+    container_name: redis
+    image: redis:7.0.5
+    hostname: redis
+    restart: always
+    volumes:
+      - v-cache:/data
+    ports:
+      - '6379:6379'
+    networks:
+      - symphony-net
+
+  cache-ui:
+    container_name: redis-commander
+    hostname: redis-commander
+    image: rediscommander/redis-commander:latest
+    restart: always
+    environment:
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+    ports:
+      - '8081:8081'
+    depends_on:
+      - cache
+    networks:
+      - symphony-net
+
+  # OBSERVABILITY 
   prometheus:
     container_name: prometheus
     image: prom/prometheus:v2.40.5
@@ -10,7 +116,7 @@ services:
       - v-metrics:/prometheus
       - ./config/prometheus.yml:/etc/prometheus/prometheus.yml
     networks:
-      - host
+      - symphony-net
     extra_hosts:
       - "host.docker.internal:host-gateway"
 
@@ -29,11 +135,11 @@ services:
     depends_on:
       - prometheus
     networks:
-      - host
+      - symphony-net
 
   elasticsearch:
     container_name: elasticsearch
-    image: elasticsearch:8.5.2
+    image: elasticsearch:7.17.8
     volumes:
       - ./config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
       - v-elastic:/usr/share/elasticsearch/data
@@ -45,11 +151,11 @@ services:
       - 9200:9200
       - 9300:9300
     networks:
-      - host
+      - symphony-net
 
   logstash:
     container_name: logstash
-    image: logstash:8.5.2
+    image: logstash:7.17.8
     restart: always
     volumes:
       - ./config/logstash.yml:/usr/share/logstash/config/logstash.yml
@@ -61,11 +167,11 @@ services:
     depends_on:
       - elasticsearch
     networks:
-      - host
+      - symphony-net
 
   kibana:
     container_name: kibana
-    image: kibana:8.5.2
+    image: kibana:7.17.8
     restart: always
     depends_on:
       - elasticsearch
@@ -74,7 +180,7 @@ services:
     ports:
       - 5601:5601
     networks:
-      - host
+      - symphony-net
 
   jaeger:
     container_name: jaeger
@@ -85,39 +191,38 @@ services:
       - 6832:6832/udp
       - 16686:16686
     networks:
-      - host
+      - symphony-net
 
+  # KAFKA
   zookeeper:
     container_name: zookeeper
-    image: confluentinc/cp-zookeeper:7.3.0
+    image: bitnami/zookeeper:3.8.0
     networks:
-      - host
+      - symphony-net
+    ports:
+      - 2181:2181
     environment:
-      ZOOKEEPER_CLIENT_PORT: 2181
-      ZOOKEEPER_TICK_TIME: 2000
+      ALLOW_ANONYMOUS_LOGIN: 'yes'
 
   kafka:
     container_name: kafka
-    image: confluentinc/cp-kafka:7.3.0
+    image: bitnami/kafka:3.3.1
     networks:
-      - host
+      - symphony-net
     depends_on:
       - zookeeper
     ports:
       - 9092:9092
     environment:
-      KAFKA_BROKER_ID: 1
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_CFG_ZOOKEEPER_CONNECT: zookeeper:2181
+      ALLOW_PLAINTEXT_LISTENER: 'yes'
 
   kafdrop:
     container_name: kafdrop
     restart: always
     image: obsidiandynamics/kafdrop:3.30.0
     networks:
-      - host
+      - symphony-net
     depends_on:
       - kafka
     ports:
@@ -126,9 +231,12 @@ services:
       KAFKA_BROKERCONNECT: kafka:29092
 
 networks:
-  host:
+  symphony-net:
     driver: bridge
 
 volumes:
   v-metrics:
   v-elastic:
+  v-database-auth:
+  v-database-billing:
+  v-cache:
