@@ -37,7 +37,6 @@ services:
       dockerfile: Dockerfile
     ports:
       - '5002:5002'
-    command: cargo run http
     environment:
       - APP_NAME=auth-plus-billling
       - PORT=5002
@@ -49,6 +48,31 @@ services:
       - symphony-net
     depends_on:
       - database-billing
+  
+  notification:
+    build:
+      context: auth-plus-notification
+      dockerfile: Dockerfile
+    ports:
+      - '5001:5001'
+    environment:
+      - APP_NAME=auth-plus-notification
+      - APP_PORT=5001
+      - GO_ENV=development
+      - AWS_ACCESS_KEY_ID=YOUR_AKID
+      - AWS_SECRET_ACCESS_KEY=YOUR_SECRET_KEY
+      - AWS_SESSION_TOKEN=TOKEN
+      - GOOGLE_APPLICATION_CREDENTIALS=/app/service-account-file.json
+      - GOOGLE_APPLICATION_NAME=auth-plus-c2b74
+      - MAILGUN_API_KEY=mailgun-api-key
+      - ONESIGNAL_API_KEY=onesignal-api-key
+      - SENDGRID_API_KEY=sendgrid-api-key
+      - TELEGRAM_API_KEY=5198414170:AAFPd4v3t0ty5cnSRJFN_Qjxp-e7twVk8aA
+      - TWILIO_ACCOUNT_SID=ACfd0573f9f976b99746c693947axxxxxx
+      - TWILIO_AUTH_TOKEN=fe4fdcdb09e234bfb63a4091f8xxxxxx
+    restart: always
+    networks:
+      - symphony-net
 
   database-auth:
     image: postgres:15.1

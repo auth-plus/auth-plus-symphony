@@ -51,3 +51,4 @@ make stop
 
 - [ ] Add Vault from HashiCorp
 - [ ] Local simulation with minikube
+- [ ] Update ELK version to 8.5 but there's some issues with elatic user
