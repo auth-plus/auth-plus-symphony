@@ -1,13 +1,21 @@
 global:
   scrape_interval: 5s
 scrape_configs:
-  - job_name: 'prometheus'
+  - job_name: "prometheus"
     static_configs:
-      - targets: ['localhost:9090']
+      - targets: ["localhost:9090"]
   - job_name: "auth-plus-authentication"
     metrics_path: /metrics
     static_configs:
-      - targets: ['api:5000','host.docker.internal:5000']
+      - targets: ["authentication:5000", "host.docker.internal:5000"]
+  - job_name: "auth-plus-notification"
+    metrics_path: /metrics
+    static_configs:
+      - targets: ["notification:5001", "host.docker.internal:5001"]
+  - job_name: "auth-plus-billing"
+    metrics_path: /metrics
+    static_configs:
+      - targets: ["billing:5002", "host.docker.internal:5002"]
   - job_name: node
     static_configs:
-      - targets: ['localhost:9100']
+      - targets: ["localhost:9100"]

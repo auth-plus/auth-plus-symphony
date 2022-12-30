@@ -4,9 +4,10 @@ services:
     build:
       context: auth-plus-authentication
       dockerfile: Dockerfile
+      target: dependency
     ports:
       - '5000:5000'
-    command: npm run dev
+    command: tail -f /dev/null
     environment:
       - APP_NAME=auth-plus-authentication
       - PORT=5000
@@ -23,6 +24,8 @@ services:
       - LOGSTASH_PORT=5044
       - KAFKA_HOST=kafka
       - KAFKA_PORT=29092
+    volumes:
+      - ./auth-plus-authentication:/app
     restart: always
     networks:
       - symphony-net
@@ -34,6 +37,8 @@ services:
     build:
       context: auth-plus-billing
       dockerfile: Dockerfile
+      target: dependency
+    command: tail -f /dev/null
     ports:
       - '5002:5002'
     environment:
@@ -42,6 +47,8 @@ services:
       - RUST_ENV=development
       - DATABASE_HOST=postgres://root:db_password@database-billing:5433/billing
       - KAFKA_HOST=kafka:9092
+    volumes:
+      - ./auth-plus-billing:/app
     restart: always
     networks:
       - symphony-net
@@ -52,9 +59,10 @@ services:
     build:
       context: auth-plus-notification
       dockerfile: Dockerfile
+      target: builder
+    command: go run ./cmd/http_server.go
     ports:
       - '5001:5001'
-    command: go run ./cmd/http_server.go
     environment:
       - APP_NAME=auth-plus-notification
       - APP_PORT=5001
@@ -70,6 +78,8 @@ services:
       - TELEGRAM_API_KEY=5198414170:AAFPd4v3t0ty5cnSRJFN_Qjxp-e7twVk8aA
       - TWILIO_ACCOUNT_SID=ACfd0573f9f976b99746c693947axxxxxx
       - TWILIO_AUTH_TOKEN=fe4fdcdb09e234bfb63a4091f8xxxxxx
+    volumes:
+      - ./auth-plus-notification:/app
     restart: always
     networks:
       - symphony-net
@@ -216,7 +226,7 @@ services:
       - 9411:9411
     networks:
       - symphony-net
-      
+
   # KAFKA
   zookeeper:
     container_name: zookeeper

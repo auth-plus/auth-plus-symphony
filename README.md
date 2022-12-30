@@ -45,7 +45,7 @@ make stop
 - Prometheus: <http://localhost:9090/>
 - Grafana: <http://localhost:3000/>
 - Kibana: <http://localhost:5601/>
-- Jaeger: <http://localhost:16686/>
+- Zipkin: <http://localhost:9411/>
 
 ## TODO
 

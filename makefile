@@ -3,6 +3,16 @@ start:
 	docker-compose up -d
 	HOST=localhost make migration/up
 
+.PHONY: dev
+dev:
+	docker-compose -f docker-compose.dev.yml up -d
+	HOST=localhost make migration/up
+
+.PHONY: attach
+attach:
+	docker-compose -f docker-compose.dev.yml up -d
+	docker-compose exec $(app) sh
+
 .PHONY: stop
 stop:
 	docker-compose down
