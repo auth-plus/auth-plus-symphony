@@ -35,7 +35,9 @@ clean/docker:
 	make stop
 	docker container prune -f
 	docker volume prune -f
-	docker image prune -f
 	docker network prune -f
+	docker rmi auth-plus-symphony-authentication
+	docker rmi auth-plus-symphony-billing
+	docker rmi auth-plus-symphony-notification
 	rm -rf db/schema.sql
 	rm -f db/schema.sql
