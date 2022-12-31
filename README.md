@@ -1,6 +1,12 @@
 # Auth+ Symphony
 
-This for orchestrate all services of auth-plus. For this work you should clone this repository and then clone others repository. like this
+This for orchestrate all services of auth-plus organization. This repo was created so we can simulate traffic between services. This way we can look after observability issues and execute e2e and load tests on user machine.
+
+In the future we can use config files to create enviroments for test purpose directing link for private registry like Container Registry or AWS ECR. This way we can simulate staging enviroment locally.
+
+## Setup
+
+For this work you should clone this repository and then clone others repository. like this:
 
 ```bash
 git clone git@github.com:auth-plus/auth-plus-symphony.git
@@ -13,11 +19,22 @@ git clone git@github.com:auth-plus/auth-plus-notification.git
 ## Commands
 
 ```bash
-# rise all containers
+# rise all containers in production mode
 make start
+
+# rise all containers in development mode
+make dev
+
+# Attach bash to container. THIS SHOULD ONLY BE USED AFTER make start/dev
+app=authentication make attach
+app=notification make attach
+app=billing make attach
 
 # rise all containers
 make stop
+
+# reset all containers
+make clean/docker
 ```
 
 ## Link after infra build up
@@ -45,7 +62,7 @@ make stop
 - Prometheus: <http://localhost:9090/>
 - Grafana: <http://localhost:3000/>
 - Kibana: <http://localhost:5601/>
-- Jaeger: <http://localhost:16686/>
+- Zipkin: <http://localhost:9411/>
 
 ## TODO
 
