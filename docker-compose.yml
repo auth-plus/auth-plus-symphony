@@ -6,7 +6,7 @@ services:
       dockerfile: Dockerfile
     ports:
       - '5000:5000'
-    command: npm run dev
+    command: npm start
     environment:
       - APP_NAME=auth-plus-authentication
       - PORT=5000
@@ -36,6 +36,8 @@ services:
       dockerfile: Dockerfile
     ports:
       - '5002:5002'
+    command: ./http
+    
     environment:
       - APP_NAME=auth-plus-billling
       - PORT=5002
@@ -54,7 +56,7 @@ services:
       dockerfile: Dockerfile
     ports:
       - '5001:5001'
-    command: go run ./cmd/http_server.go
+    command: ./server
     environment:
       - APP_NAME=auth-plus-notification
       - APP_PORT=5001

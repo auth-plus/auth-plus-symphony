@@ -60,7 +60,7 @@ services:
       context: auth-plus-notification
       dockerfile: Dockerfile
       target: builder
-    command: go run ./cmd/http_server.go
+    command: tail -f /dev/null
     ports:
       - '5001:5001'
     environment:
