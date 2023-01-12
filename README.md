@@ -55,13 +55,13 @@ make clean/docker
 ### Message Broker
 
 - Kafka: <http://localhost:9092/>
-- Kafdrop: <http://localhost:19000/>
+- Kafdrop: <http://localhost:9000/>
 
 ### Observability
 
 - Prometheus: <http://localhost:9090/>
 - Grafana: <http://localhost:3000/>
-- Kibana: <http://localhost:5601/>
+- Kibana: <http://localhost:5601/> (user/password: elastic/elk_password )
 - Zipkin: <http://localhost:9411/>
 
 ## TODO
