@@ -10,25 +10,22 @@ services:
     environment:
       - APP_NAME=auth-plus-authentication
       - PORT=5000
-      - NODE_ENV=development
+      - NODE_ENV=production
       - JWT_SECRET=dPBZ_CSWBApK&7EwL?!_%5dLjTK7An
-      - DATABASE_HOST=database
+      - DATABASE_HOST=database-auth
       - DATABASE_USER=root
       - DATABASE_PASSWORD=db_password
       - DATABASE_DATABASE=auth
       - DATABASE_PORT=5432
-      - CACHE_HOST=redis
-      - CACHE_PORT=6379
-      - LOGSTASH_HOST=elasticsearch
-      - LOGSTASH_PORT=5044
-      - KAFKA_HOST=kafka
-      - KAFKA_PORT=29092
+      - CACHE_URL=redis:6379
+      - KAFKA_URL=kafka:9092
     restart: always
     networks:
       - symphony-net
     depends_on:
       - database-auth
       - cache
+      - kafka
 
   billing:
     build:
@@ -36,12 +33,11 @@ services:
       dockerfile: Dockerfile
     ports:
       - '5002:5002'
-    command: ./http
-    
+    command: ./kafka
     environment:
       - APP_NAME=auth-plus-billling
       - PORT=5002
-      - RUST_ENV=development
+      - RUST_ENV=production
       - DATABASE_HOST=postgres://root:db_password@database-billing:5433/billing
       - KAFKA_HOST=kafka:9092
     restart: always
@@ -49,6 +45,7 @@ services:
       - symphony-net
     depends_on:
       - database-billing
+      - kafka
   
   notification:
     build:
@@ -56,11 +53,13 @@ services:
       dockerfile: Dockerfile
     ports:
       - '5001:5001'
-    command: ./server
+    command: ./kafka_server
     environment:
       - APP_NAME=auth-plus-notification
       - APP_PORT=5001
-      - GO_ENV=development
+      - GO_ENV=production
+      - KAFKA_URL=kafka
+      - KAFKA_PORT=9092
       - AWS_ACCESS_KEY_ID=YOUR_AKID
       - AWS_SECRET_ACCESS_KEY=YOUR_SECRET_KEY
       - AWS_SESSION_TOKEN=TOKEN
@@ -75,6 +74,8 @@ services:
     restart: always
     networks:
       - symphony-net
+    depends_on:
+      - kafka
 
   database-auth:
     image: postgres:15.1
@@ -227,6 +228,8 @@ services:
       - symphony-net
     ports:
       - 2181:2181
+      - 2888:2888
+      - 3888:3888
     environment:
       ALLOW_ANONYMOUS_LOGIN: 'yes'
 
@@ -252,9 +255,9 @@ services:
     depends_on:
       - kafka
     ports:
-      - 19000:9000
+      - 9000:9000
     environment:
-      KAFKA_BROKERCONNECT: kafka:29092
+      KAFKA_BROKERCONNECT: kafka:9092,localhost:9092
 
 networks:
   symphony-net:
