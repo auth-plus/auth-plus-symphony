@@ -52,6 +52,18 @@ services:
     depends_on:
       - database-billing
   
+  client:
+    build:
+      context: auth-plus-client
+      dockerfile: Dockerfile
+      target: dependency
+    ports:
+      - '5004:3000'
+    command: tail -f /dev/null
+    restart: always
+    networks:
+      - symphony-net
+
   notification:
     build:
       context: auth-plus-notification

@@ -47,6 +47,17 @@ services:
       - database-billing
       - kafka
   
+  client:
+    build:
+      context: auth-plus-client
+      dockerfile: Dockerfile
+    ports:
+      - '5004:3000'
+    command: node ./build/index.js
+    restart: always
+    networks:
+      - symphony-net
+
   notification:
     build:
       context: auth-plus-notification
