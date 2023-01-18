@@ -13,6 +13,7 @@ git clone git@github.com:auth-plus/auth-plus-symphony.git
 cd auth-plus-symphony
 git clone git@github.com:auth-plus/auth-plus-authentication.git
 git clone git@github.com:auth-plus/auth-plus-billing.git
+git clone git@github.com:auth-plus/auth-plus-client.git
 git clone git@github.com:auth-plus/auth-plus-notification.git
 ```
 
