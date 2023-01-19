@@ -20,6 +20,7 @@ services:
       - DATABASE_PORT=5432
       - CACHE_URL=redis:6379
       - KAFKA_URL=kafka:9092
+      - ZIPKIN_URL=http://zipkin:9411/api/v2/spans
     volumes:
       - ./auth-plus-authentication:/app
     restart: always
@@ -57,9 +58,11 @@ services:
       context: auth-plus-client
       dockerfile: Dockerfile
       target: dependency
+    command: tail -f /dev/null
     ports:
       - '5004:3000'
-    command: tail -f /dev/null
+    volumes:
+      - ./auth-plus-client:/app
     restart: always
     networks:
       - symphony-net
