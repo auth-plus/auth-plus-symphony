@@ -44,7 +44,10 @@ make clean/docker
 
 - Authentication: <http://localhost:5000/>
 - Billing: <http://localhost:5002/>
+- Billing(Kafka): <http://localhost:5012/>
+- Client: <http://localhost:5003/>
 - Notification: <http://localhost:5001/>
+- Notification(Kafka): <http://localhost:5011/>
 
 ### Storage
 
