@@ -9,25 +9,25 @@ services:
       - '5000:5000'
     command: tail -f /dev/null
     environment:
-      - APP_NAME=auth-plus-authentication
-      - PORT=5000
-      - NODE_ENV=development
-      - JWT_SECRET=dPBZ_CSWBApK&7EwL?!_%5dLjTK7An
-      - DATABASE_HOST=database-auth
-      - DATABASE_USER=root
-      - DATABASE_PASSWORD=db_password
-      - DATABASE_DATABASE=auth
-      - DATABASE_PORT=5432
-      - CACHE_URL=redis:6379
-      - KAFKA_URL=kafka:9092
-      - ZIPKIN_URL=http://zipkin:9411/api/v2/spans
+      APP_NAME: auth-plus-authentication
+      PORT: 5000
+      NODE_ENV: development
+      JWT_SECRET: dPBZ_CSWBApK&7EwL?!_%5dLjTK7An
+      DATABASE_HOST: database
+      DATABASE_USER: root
+      DATABASE_PASSWORD: db_password
+      DATABASE_DATABASE: auth
+      DATABASE_PORT: 5432
+      CACHE_URL: redis:6379
+      KAFKA_URL: kafka:9092
+      ZIPKIN_URL: http://zipkin:9411/api/v2/spans
     volumes:
       - ./auth-plus-authentication:/app
     restart: always
     networks:
       - symphony-net
     depends_on:
-      - database-auth
+      - database
       - cache
       - kafka
 
@@ -40,18 +40,18 @@ services:
     ports:
       - '5002:5002'
     environment:
-      - APP_NAME=auth-plus-billling
-      - PORT=5002
-      - RUST_ENV=development
-      - DATABASE_HOST=postgres://root:db_password@database-billing:5433/billing
-      - KAFKA_HOST=kafka:9092
+      APP_NAME: auth-plus-billling
+      PORT: 5002
+      RUST_ENV: development
+      DATABASE_HOST: postgres://root:db_password@database:5433/billing
+      KAFKA_HOST: kafka:9092
     volumes:
       - ./auth-plus-billing:/app
     restart: always
     networks:
       - symphony-net
     depends_on:
-      - database-billing
+      - database
   
   client:
     build:
@@ -76,53 +76,40 @@ services:
     ports:
       - '5001:5001'
     environment:
-      - APP_NAME=auth-plus-notification
-      - APP_PORT=5001
-      - GO_ENV=development
-      - KAFKA_URL=kafka
-      - KAFKA_PORT=9092
-      - AWS_ACCESS_KEY_ID=YOUR_AKID
-      - AWS_SECRET_ACCESS_KEY=YOUR_SECRET_KEY
-      - AWS_SESSION_TOKEN=TOKEN
-      - GOOGLE_APPLICATION_CREDENTIALS=/app/service-account-file.json
-      - GOOGLE_APPLICATION_NAME=auth-plus-c2b74
-      - MAILGUN_API_KEY=mailgun-api-key
-      - ONESIGNAL_API_KEY=onesignal-api-key
-      - SENDGRID_API_KEY=sendgrid-api-key
-      - TELEGRAM_API_KEY=5198414170:AAFPd4v3t0ty5cnSRJFN_Qjxp-e7twVk8aA
-      - TWILIO_ACCOUNT_SID=ACfd0573f9f976b99746c693947axxxxxx
-      - TWILIO_AUTH_TOKEN=fe4fdcdb09e234bfb63a4091f8xxxxxx
+      APP_NAME: auth-plus-notification
+      APP_PORT: 5001
+      GO_ENV: development
+      KAFKA_URL: kafka
+      KAFKA_PORT: 9092
+      AWS_ACCESS_KEY_ID: YOUR_AKID
+      AWS_SECRET_ACCESS_KEY: YOUR_SECRET_KEY
+      AWS_SESSION_TOKEN: TOKEN
+      GOOGLE_APPLICATION_CREDENTIALS: /app/service-account-file.json
+      GOOGLE_APPLICATION_NAME: auth-plus-c2b74
+      MAILGUN_API_KEY: mailgun-api-key
+      ONESIGNAL_API_KEY: onesignal-api-key
+      SENDGRID_API_KEY: sendgrid-api-key
+      TELEGRAM_API_KEY: 5198414170:AAFPd4v3t0ty5cnSRJFN_Qjxp-e7twVk8aA
+      TWILIO_ACCOUNT_SID: ACfd0573f9f976b99746c693947axxxxxx
+      TWILIO_AUTH_TOKEN: fe4fdcdb09e234bfb63a4091f8xxxxxx
     volumes:
       - ./auth-plus-notification:/app
     restart: always
     networks:
       - symphony-net
 
-  database-auth:
+  database:
     image: postgres:15.1
     restart: always
     environment:
-      - POSTGRES_PASSWORD=db_password
-      - POSTGRES_USER=root
-      - POSTGRES_DB=auth
+      POSTGRES_PASSWORD: db_password
+      POSTGRES_USER: root
+      POSTGRES_MULTIPLE_DATABASES: auth,billing
     ports:
       - '5432:5432'
     volumes:    
-      - v-database-auth:/var/lib/postgresql/data
-    networks:
-      - symphony-net
-
-  database-billing:
-    image: postgres:15.1
-    restart: always
-    environment:
-      - POSTGRES_PASSWORD=db_password
-      - POSTGRES_USER=root
-      - POSTGRES_DB=billing
-    ports:
-      - '5433:5432'
-    volumes:    
-      - v-database-billing:/var/lib/postgresql/data
+      - v-database:/var/lib/postgresql/data
+      - ./config/docker-entrypoint.sh:/docker-entrypoint-initdb.d/docker-entrypoint.sh
     networks:
       - symphony-net
 
@@ -235,7 +222,7 @@ services:
     image: openzipkin/zipkin
     restart: always
     environment:
-      - STORAGE_TYPE=mem
+      STORAGE_TYPE: mem
     ports:
       - 9411:9411
     networks:
@@ -287,6 +274,5 @@ networks:
 volumes:
   v-metrics:
   v-elastic:
-  v-database-auth:
-  v-database-billing:
+  v-database:
   v-cache:

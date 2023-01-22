@@ -25,7 +25,7 @@ migration/up:
 	--no-dump-schema up
 
 	docker run -t --network=host -v "$(shell pwd)/auth-plus-billing/db:/db" ghcr.io/amacneil/dbmate:1.16 \
-	--url postgres://root:db_password@$(HOST):5433/billing?sslmode=disable \
+	--url postgres://root:db_password@$(HOST):5432/billing?sslmode=disable \
 	--wait \
 	--wait-timeout 60s \
 	--no-dump-schema up
@@ -37,7 +37,10 @@ clean/docker:
 	docker volume prune -f
 	docker network prune -f
 	docker rmi auth-plus-symphony-authentication
-	docker rmi auth-plus-symphony-billing
-	docker rmi auth-plus-symphony-notification
+	docker rmi auth-plus-symphony-billing-http
+	docker rmi auth-plus-symphony-billing-kafka
+	docker rmi auth-plus-symphony-client
+	docker rmi auth-plus-symphony-notification-http
+	docker rmi auth-plus-symphony-notification-kafka
 	rm -rf db/schema.sql
 	rm -f db/schema.sql
