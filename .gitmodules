@@ -1,0 +1,12 @@
+[submodule "auth-plus-authentication"]
+	path = auth-plus-authentication
+	url = https://github.com/auth-plus/auth-plus-authentication
+[submodule "auth-plus-billing"]
+	path = auth-plus-billing
+	url = https://github.com/auth-plus/auth-plus-billing
+[submodule "auth-plus-notification"]
+	path = auth-plus-notification
+	url = https://github.com/auth-plus/auth-plus-notification
+[submodule "auth-plus-client"]
+	path = auth-plus-client
+	url = https://github.com/auth-plus/auth-plus-client
