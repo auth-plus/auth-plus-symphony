@@ -1,0 +1,85 @@
+{
+	"info": {
+		"_postman_id": "7b9153a2-a7d8-4db9-be6b-5f524c9b1a0d",
+		"name": "Notification",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "3846135"
+	},
+	"item": [
+		{
+			"name": "Heatlh",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5001/health",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"health"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Email",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\":\"teste@test.com\",\n    \"content\":\"<!DOCTYPE html><html lang='en'><head><meta charset='utf-8'><title>title</title></head><body><p>Teste</p></body></html>\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5001/email",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"email"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Push Notification",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"deviceId\": \"cDxDrGiXRnMXFXFsyDLSY5:APA91bF9QI6-YU2eJr7JcF8u6lrAGAIBEpG4j3IOrU2h2EFUahYM1z0fMR_IyqybrOfc62ASy5uRyg1uzjR2trlpmZujQ79-QQAf7iSYj_4HZn3fWYg9yn9se3-x7t9waq74SlhLS9Ih\",\n    \"title\": \"Eu te amo\",\n    \"content\": \"Meu amor\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5001/push_notification",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"push_notification"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

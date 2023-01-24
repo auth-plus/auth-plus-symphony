@@ -1,0 +1,511 @@
+{
+	"info": {
+		"_postman_id": "10e0ab7e-e588-4172-975a-d42097afe626",
+		"name": "Billing",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "3846135"
+	},
+	"item": [
+		{
+			"name": "Invoice",
+			"item": [
+				{
+					"name": "Create Invoice",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"external_user_id\": \"b6c71874-9c23-11ed-b3de-0242ac1c0007\",\n    \"itens\": [\n        {\n            \"description\": \"cccccc\",\n            \"quantity\": 1,\n            \"amount\": 2.78,\n            \"currency\": \"BRL\"\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/invoice",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"invoice"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Create Invoice",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"external_user_id\": \"f60634aa-35df-4f2d-9884-dbdc66c968fb\",\n    \"itens\": [\n        {\n            \"description\": \"aaaaa\",\n            \"quantity\": 1,\n            \"amount\": 2.78,\n            \"currency\": \"BRL\"\n        }\n    ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/invoice",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"invoice"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "content-length",
+									"value": "111"
+								},
+								{
+									"key": "content-type",
+									"value": "application/json"
+								},
+								{
+									"key": "date",
+									"value": "Thu, 19 Jan 2023 23:31:04 GMT"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": \"9b179d7b-eecd-4d95-8c60-e64f000a6419\",\n    \"user_id\": \"b92afb76-8c04-47e6-89a0-1eb255134d7e\",\n    \"status\": \"Draft\"\n}"
+						}
+					]
+				},
+				{
+					"name": "List invoice by user ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/invoice/4b80d6d2-9bff-11ed-be6a-0242ac170005",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"invoice",
+								"4b80d6d2-9bff-11ed-be6a-0242ac170005"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "List invoice by user ID",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URL}}/invoice/f60634aa-35df-4f2d-9884-dbdc66c968fb",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"invoice",
+										"f60634aa-35df-4f2d-9884-dbdc66c968fb"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "content-length",
+									"value": "125"
+								},
+								{
+									"key": "content-type",
+									"value": "application/json"
+								},
+								{
+									"key": "date",
+									"value": "Thu, 19 Jan 2023 23:31:37 GMT"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"invoces\": [\n        {\n            \"id\": \"9b179d7b-eecd-4d95-8c60-e64f000a6419\",\n            \"user_id\": \"b92afb76-8c04-47e6-89a0-1eb255134d7e\",\n            \"status\": \"Draft\"\n        }\n    ]\n}"
+						}
+					]
+				},
+				{
+					"name": "Update Invoice",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"invoice_id\": \"baf47380-f49b-445d-8f5f-ed3d38e0c24d\",\n    \"status\": \"pending\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/invoice",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"invoice"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Update Invoice",
+							"originalRequest": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"invoice_id\": \"baf47380-f49b-445d-8f5f-ed3d38e0c24d\",\n    \"status\": \"pending\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/invoice",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"invoice"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "content-length",
+									"value": "113"
+								},
+								{
+									"key": "content-type",
+									"value": "application/json"
+								},
+								{
+									"key": "date",
+									"value": "Fri, 20 Jan 2023 17:15:10 GMT"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": \"baf47380-f49b-445d-8f5f-ed3d38e0c24d\",\n    \"user_id\": \"102461d8-ee09-4977-90f5-44d4484c1181\",\n    \"status\": \"Pending\"\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "Create User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"external_id\": \"5d1e3cac-98eb-11ed-aae3-0242ac160005\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/user",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"user"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Create User",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"external_id\": \"f60634aa-35df-4f2d-9884-dbdc66c968fb\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/user",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"user"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "content-length",
+									"value": "98"
+								},
+								{
+									"key": "content-type",
+									"value": "application/json"
+								},
+								{
+									"key": "date",
+									"value": "Thu, 19 Jan 2023 23:28:18 GMT"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": \"b92afb76-8c04-47e6-89a0-1eb255134d7e\",\n    \"external_id\": \"f60634aa-35df-4f2d-9884-dbdc66c968fb\"\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Payment Method",
+			"item": [
+				{
+					"name": "Create Payment Method",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"external_user_id\": \"f60634aa-35df-4f2d-9884-dbdc66c968fb\",\n    \"is_default\": true,\n    \"method\": \"pix\",\n    \"info\": {\n        \"PixInfo\": {\n            \"key\": \"aaaaa\",\n            \"external_id\": \"bbbbbbbbbbb\"\n        }\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/payment_method",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"payment_method"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Create Payment Method",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"external_user_id\": \"f60634aa-35df-4f2d-9884-dbdc66c968fb\",\n    \"is_default\": true,\n    \"method\": \"pix\",\n    \"info\": {\n        \"PixInfo\": {\n            \"key\": \"aaaaa\",\n            \"external_id\": \"bbbbbbbbbbb\"\n        }\n    }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/payment_method",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"payment_method"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "content-length",
+									"value": "190"
+								},
+								{
+									"key": "content-type",
+									"value": "application/json"
+								},
+								{
+									"key": "date",
+									"value": "Fri, 20 Jan 2023 16:18:21 GMT"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": \"ac0b98d8-aedb-45cb-9d58-62129db93088\",\n    \"user_id\": \"102461d8-ee09-4977-90f5-44d4484c1181\",\n    \"is_default\": true,\n    \"method\": \"Pix\",\n    \"info\": {\n        \"PixInfo\": {\n            \"key\": \"aaaaa\",\n            \"external_id\": \"bbbbbbbbbbb\"\n        }\n    }\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Charge",
+			"item": [
+				{
+					"name": "Create Charge",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"invoice_id\": \"baf47380-f49b-445d-8f5f-ed3d38e0c24d\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/charge",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"charge"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Create Charge",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"invoice_id\": \"baf47380-f49b-445d-8f5f-ed3d38e0c24d\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/charge",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"charge"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "content-length",
+									"value": "176"
+								},
+								{
+									"key": "content-type",
+									"value": "application/json"
+								},
+								{
+									"key": "date",
+									"value": "Fri, 20 Jan 2023 16:18:54 GMT"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": \"becb7cfa-baa8-4443-9813-741e1fc4b78f\",\n    \"invoice_id\": \"baf47380-f49b-445d-8f5f-ed3d38e0c24d\",\n    \"status\": \"Progress\",\n    \"payment_method_id\": \"ac0b98d8-aedb-45cb-9d58-62129db93088\"\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Health",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/health",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"health"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Metrics",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/metrics",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"metrics"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "BASE_URL",
+			"value": ""
+		}
+	]
+}
