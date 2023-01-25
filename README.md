@@ -4,19 +4,6 @@ This for orchestrate all services of auth-plus organization. This repo was creat
 
 In the future we can use config files to create enviroments for test purpose directing link for private registry like Container Registry or AWS ECR. This way we can simulate staging enviroment locally.
 
-## Setup
-
-For this work you should clone this repository and then clone others repository. like this:
-
-```bash
-git clone git@github.com:auth-plus/auth-plus-symphony.git
-cd auth-plus-symphony
-git clone git@github.com:auth-plus/auth-plus-authentication.git
-git clone git@github.com:auth-plus/auth-plus-billing.git
-git clone git@github.com:auth-plus/auth-plus-client.git
-git clone git@github.com:auth-plus/auth-plus-notification.git
-```
-
 ## Commands
 
 ```bash
@@ -30,6 +17,7 @@ make dev
 app=authentication make attach
 app=notification make attach
 app=billing make attach
+app=client make attach
 
 # rise all containers
 make stop
@@ -37,6 +25,15 @@ make stop
 # reset all containers
 make clean/docker
 ```
+
+## Documentation
+
+Tutorial: [link](./docs/TUTORIAL.md)
+Postaman Collections:
+
+- Authentication: [link](./docs/Authentication.postman_collection.json)
+- Billing: [link](./docs/Billing.postman_collection.json)
+- Notification: [link](./docs/Notification.postman_collection.json)
 
 ## Link after infra build up
 
