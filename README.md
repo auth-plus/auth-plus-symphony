@@ -67,6 +67,7 @@ Postaman Collections:
 
 ## TODO
 
-- [ ] Add Vault from HashiCorp
-- [ ] Local simulation with minikube
-- [ ] Update ELK version to 8.5 but there's some issues with elatic user
+- Add [Vault](https://www.vaultproject.io/) for managing secret
+- Local simulation with minikube
+- Update ELK version to 8.5 but there's some issues with elatic user
+- Add Change Data Capture (CDC) like [Debezium](https://debezium.io/)
