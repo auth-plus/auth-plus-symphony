@@ -23,10 +23,16 @@ services:
     restart: always
     networks:
       - symphony-net
+    logging:
+      driver: "fluentd"
+      options:
+        fluentd-address: localhost:24224
+        tag: httpd.access
     depends_on:
       - database
       - cache
       - kafka
+      - fluentd
 
   billing-http:
     build:
@@ -44,8 +50,14 @@ services:
     restart: always
     networks:
       - symphony-net
+    logging:
+      driver: "fluentd"
+      options:
+        fluentd-address: localhost:24224
+        tag: httpd.access
     depends_on:
       - database
+      - fluentd
 
   billing-kafka:
     build:
@@ -63,9 +75,15 @@ services:
     restart: always
     networks:
       - symphony-net
+    logging:
+      driver: "fluentd"
+      options:
+        fluentd-address: localhost:24224
+        tag: httpd.access
     depends_on:
       - database
       - kafka
+      - fluentd
   
   client:
     build:
@@ -105,6 +123,13 @@ services:
     restart: always
     networks:
       - symphony-net
+    logging:
+      driver: "fluentd"
+      options:
+        fluentd-address: localhost:24224
+        tag: httpd.access
+    depends_on:
+      - fluentd
   
   notification-kafka:
     build:
@@ -133,9 +158,16 @@ services:
     restart: always
     networks:
       - symphony-net
+    logging:
+      driver: "fluentd"
+      options:
+        fluentd-address: localhost:24224
+        tag: httpd.access
     depends_on:
       - kafka
-
+      - fluentd
+    
+  # Storage
   database:
     image: postgres:15.1
     restart: always
@@ -210,48 +242,79 @@ services:
     networks:
       - symphony-net
 
-  elasticsearch:
-    container_name: elasticsearch
-    image: elasticsearch:7.17.8
+  # elasticsearch:
+  #   container_name: elasticsearch
+  #   image: elasticsearch:7.17.8
+  #   volumes:
+  #     - ./config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+  #     - v-elastic:/usr/share/elasticsearch/data
+  #   environment:
+  #     ES_JAVA_OPTS: -Xmx256m -Xms256m
+  #     ELASTIC_PASSWORD: elk_password
+  #     discovery.type: single-node
+  #   ports:
+  #     - 9200:9200
+  #     - 9300:9300
+  #   networks:
+  #     - symphony-net
+
+  fluentd:
+    build:
+      context: config
+      dockerfile: Dockerfile.fluentd
     volumes:
-      - ./config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
-      - v-elastic:/usr/share/elasticsearch/data
-    environment:
-      ES_JAVA_OPTS: -Xmx256m -Xms256m
-      ELASTIC_PASSWORD: elk_password
-      discovery.type: single-node
+      - ./config/fluentd.conf:/fluentd/etc/fluentd.conf
+    networks:
+      - symphony-net
     ports:
-      - 9200:9200
-      - 9300:9300
+      - "24224:24224"
+      - "24224:24224/udp"
+
+  # kibana:
+  #   container_name: kibana
+  #   image: kibana:7.17.8
+  #   restart: always
+  #   depends_on:
+  #     - elasticsearch
+  #   volumes:
+  #     - ./config/kibana.yml:/usr/share/kibana/config/kibana.yml
+  #   ports:
+  #     - 5601:5601
+  #   networks:
+  #     - symphony-net
+
+  opensearch:
+    image: opensearchproject/opensearch:2.5.0
+    container_name: opensearch
+    environment:
+      - cluster.name=opensearch-cluster
+      - node.name=opensearch
+      - discovery.seed_hosts=opensearch
+      - cluster.initial_cluster_manager_nodes=opensearch
+      - bootstrap.memory_lock=true
+      - "OPENSEARCH_JAVA_OPTS=-Xms512m -Xmx512m"
+      - "DISABLE_INSTALL_DEMO_CONFIG=true"
+      - "DISABLE_SECURITY_PLUGIN=true"
+    ulimits:
+      memlock:
+        soft: -1 # Set memlock to unlimited (no soft or hard limit)
+        hard: -1
+      nofile:
+        soft: 65536 # Maximum number of open files for the opensearch user - set to at least 65536
+        hard: 65536
+    volumes:
+      - v-opensearch:/usr/share/opensearch/data
     networks:
       - symphony-net
 
-  logstash:
-    container_name: logstash
-    image: logstash:7.17.8
-    restart: always
-    volumes:
-      - ./config/logstash.yml:/usr/share/logstash/config/logstash.yml
-      - ./config/logstash.conf:/usr/share/logstash/pipeline/logstash.conf
-    environment:
-      LS_JAVA_OPTS: -Xmx256m -Xms256m
-    ports:
-      - 5044:5044
-    depends_on:
-      - elasticsearch
-    networks:
-      - symphony-net
-
-  kibana:
-    container_name: kibana
-    image: kibana:7.17.8
-    restart: always
-    depends_on:
-      - elasticsearch
-    volumes:
-      - ./config/kibana.yml:/usr/share/kibana/config/kibana.yml
+  opensearch-dashboards:
+    container_name: opensearch-dashboards
+    image: opensearchproject/opensearch-dashboards:2.5.0
     ports:
       - 5601:5601
+    environment:
+      OPENSEARCH_HOSTS: '["https://opensearch:9200"]'
+      DISABLE_SECURITY_DASHBOARDS_PLUGIN: true
     networks:
       - symphony-net
 
@@ -316,3 +379,4 @@ volumes:
   v-database-billing:
   v-database:
   v-cache:
+  v-opensearch:
