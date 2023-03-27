@@ -30,6 +30,12 @@ migration/up:
 	--wait-timeout 60s \
 	--no-dump-schema up
 
+	docker run -t --network=host -v "$(shell pwd)/auth-plus-monetization/db:/db" ghcr.io/amacneil/dbmate:1.16 \
+	--url postgres://root:db_password@$(HOST):5432/monetization?sslmode=disable \
+	--wait \
+	--wait-timeout 60s \
+	--no-dump-schema up
+
 .PHONY: clean/docker
 clean/docker:
 	make stop
@@ -42,5 +48,6 @@ clean/docker:
 	docker rmi auth-plus-symphony-client
 	docker rmi auth-plus-symphony-notification-http
 	docker rmi auth-plus-symphony-notification-kafka
+	docker rmi auth-plus-symphony-monetization
 	rm -rf db/schema.sql
 	rm -f db/schema.sql

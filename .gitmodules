@@ -10,3 +10,6 @@
 [submodule "auth-plus-client"]
 	path = auth-plus-client
 	url = https://github.com/auth-plus/auth-plus-client
+[submodule "auth-plus-monetization"]
+	path = auth-plus-monetization
+	url = https://github.com/auth-plus/auth-plus-monetization.git

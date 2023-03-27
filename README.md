@@ -18,6 +18,7 @@ app=authentication make attach
 app=notification make attach
 app=billing make attach
 app=client make attach
+app=monetization make attach
 
 # rise all containers
 make stop

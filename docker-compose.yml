@@ -77,6 +77,25 @@ services:
     restart: always
     networks:
       - symphony-net
+  
+  monetization:
+    build:
+      context: auth-plus-monetization
+      dockerfile: Dockerfile
+    command: poetry run flask --app src/presentation/server run --port $PORT
+    environment:
+      APP_NAME: auth-plus-monetization
+      APP_PORT: 5004
+      GO_ENV: production
+    ports:
+      - '5004:5004'
+    volumes:
+      - ./auth-plus-monetization:/app
+    restart: always
+    networks:
+      - symphony-net
+    depends_on:
+      - database
 
   notification-http:
     build:
@@ -142,7 +161,7 @@ services:
     environment:
       POSTGRES_PASSWORD: db_password
       POSTGRES_USER: root
-      POSTGRES_MULTIPLE_DATABASES: auth,billing
+      POSTGRES_MULTIPLE_DATABASES: auth,billing,monetization
     ports:
       - '5432:5432'
     volumes:    

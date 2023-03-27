@@ -60,9 +60,25 @@ services:
       target: dependency
     command: tail -f /dev/null
     ports:
-      - '5004:3000'
+      - '5003:3000'
     volumes:
       - ./auth-plus-client:/app
+    restart: always
+    networks:
+      - symphony-net
+    depends_on:
+      - database
+      
+  monetization:
+    build:
+      context: auth-plus-monetization
+      dockerfile: Dockerfile
+      target: dependency
+    command: tail -f /dev/null
+    ports:
+      - '5004:5004'
+    volumes:
+      - ./auth-plus-monetization:/app
     restart: always
     networks:
       - symphony-net
@@ -104,7 +120,7 @@ services:
     environment:
       POSTGRES_PASSWORD: db_password
       POSTGRES_USER: root
-      POSTGRES_MULTIPLE_DATABASES: auth,billing
+      POSTGRES_MULTIPLE_DATABASES: auth,billing,monetization
     ports:
       - '5432:5432'
     volumes:    
