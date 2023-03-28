@@ -46,11 +46,11 @@ Postaman Collections:
 - Client: <http://localhost:5003/>
 - Notification: <http://localhost:5001/>
 - Notification(Kafka): <http://localhost:5011/>
+- Monetization: <http://localhost:5004/>
 
 ### Storage
 
-- Postgres(Authentication): <http://localhost:5432/>
-- Postgres(Billing): <http://localhost:5433/>
+- Postgres(Authentication, Billing, Monetization): <http://localhost:5432/>
 - Redis: <http://localhost:6379/>
 - Redis-Commander: <http://localhost:8081/>
 
