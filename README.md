@@ -4,6 +4,16 @@ This for orchestrate all services of auth-plus organization. This repo was creat
 
 In the future we can use config files to create enviroments for test purpose directing link for private registry like Container Registry or AWS ECR. This way we can simulate staging enviroment locally.
 
+## Pull all submodules
+
+```bash
+# First time checkout
+git submodule update --init --remote --recursive
+
+# After first checkout
+git submodule update --recursive
+```
+
 ## Commands
 
 ```bash
