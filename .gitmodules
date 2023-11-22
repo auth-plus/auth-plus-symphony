@@ -1,15 +1,15 @@
 [submodule "auth-plus-authentication"]
 	path = auth-plus-authentication
-	url = https://github.com/auth-plus/auth-plus-authentication
+	url = git@github.com:auth-plus/auth-plus-authentication.git
 [submodule "auth-plus-billing"]
 	path = auth-plus-billing
-	url = https://github.com/auth-plus/auth-plus-billing
+	url = git@github.com:auth-plus/auth-plus-billing.git
 [submodule "auth-plus-notification"]
 	path = auth-plus-notification
-	url = https://github.com/auth-plus/auth-plus-notification
+	url = git@github.com:auth-plus/auth-plus-notification.git
 [submodule "auth-plus-client"]
 	path = auth-plus-client
-	url = https://github.com/auth-plus/auth-plus-client
+	url = git@github.com:auth-plus/auth-plus-client.git
 [submodule "auth-plus-monetization"]
 	path = auth-plus-monetization
-	url = https://github.com/auth-plus/auth-plus-monetization.git
+	url = git@github.com:auth-plus/auth-plus-monetization.git
