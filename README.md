@@ -38,8 +38,10 @@ make clean/docker
 ```
 
 ## Documentation
+Flow: [draw.io](https://drive.google.com/file/d/1SaMKZhJRz868gn2Bv8vzyOW2RLfDyQui/view?usp=sharing)
 
 Tutorial: [link](./docs/TUTORIAL.md)
+
 Postaman Collections:
 
 - Authentication: [link](./docs/Authentication.postman_collection.json)
