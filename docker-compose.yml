@@ -156,7 +156,7 @@ services:
       - kafka
 
   database:
-    image: postgres:15.1
+    image: postgres:17.1
     restart: always
     environment:
       POSTGRES_PASSWORD: db_password
