@@ -15,6 +15,7 @@ NC='\033[0m' # No Color
 SUCCESSFUL=()
 FAILED=()
 FAILED_REASONS=()
+DELETED_BRANCHES=()
 
 # Find submodules
 if [ -f .gitmodules ]; then
@@ -62,6 +63,9 @@ for sm_path in $SUBMODULES; do
         echo -e "${YELLOW}Notice: Uncommitted changes detected in '$sm_path'.${NC}"
     fi
 
+    # Fetch and prune remote tracking branches
+    git fetch --prune origin 2>/dev/null || git fetch --prune 2>/dev/null || true
+
     # Attempt to checkout target branch
     CHECKOUT_OUT=$(git checkout "$BRANCH" 2>&1)
     CHECKOUT_RES=$?
@@ -105,6 +109,24 @@ for sm_path in $SUBMODULES; do
     fi
 
     echo "$PULL_OUT"
+
+    # Delete local branches that were deleted on the remote
+    GONE_BRANCHES=$(git for-each-ref --format='%(refname:short) %(upstream:track)' refs/heads | awk '$2 == "[gone]" { print $1 }')
+    if [ -n "$GONE_BRANCHES" ]; then
+        echo -e "${YELLOW}Cleaning up branches deleted on remote in '$sm_path':${NC}"
+        for gone_branch in $GONE_BRANCHES; do
+            if [ "$gone_branch" != "$BRANCH" ]; then
+                DEL_OUT=$(git branch -D "$gone_branch" 2>&1)
+                if [ $? -eq 0 ]; then
+                    echo -e "  ${GREEN}✔ Deleted local branch:${NC} $gone_branch"
+                    DELETED_BRANCHES+=("$sm_path: $gone_branch")
+                else
+                    echo -e "  ${RED}✖ Failed to delete local branch '$gone_branch':${NC} $DEL_OUT"
+                fi
+            fi
+        done
+    fi
+
     echo -e "${GREEN}✓ Successfully updated '$sm_path'${NC}"
     SUCCESSFUL+=("$sm_path")
 
@@ -120,6 +142,14 @@ if [ ${#SUCCESSFUL[@]} -gt 0 ]; then
     echo -e "${GREEN}Succeeded (${#SUCCESSFUL[@]}):${NC}"
     for sm in "${SUCCESSFUL[@]}"; do
         echo -e "  ${GREEN}✔${NC} $sm"
+    done
+fi
+
+if [ ${#DELETED_BRANCHES[@]} -gt 0 ]; then
+    echo ""
+    echo -e "${YELLOW}Cleaned up branches (${#DELETED_BRANCHES[@]}):${NC}"
+    for db in "${DELETED_BRANCHES[@]}"; do
+        echo -e "  ${YELLOW}🗑${NC} $db"
     done
 fi
 
