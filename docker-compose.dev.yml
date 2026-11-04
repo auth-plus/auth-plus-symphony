@@ -247,7 +247,7 @@ services:
   # KAFKA
   zookeeper:
     container_name: zookeeper
-    image: bitnami/zookeeper:3.8.0
+    image: soldevelo/zookeeper:3.8.4
     networks:
       - symphony-net
     ports:
@@ -259,7 +259,7 @@ services:
 
   kafka:
     container_name: kafka
-    image: bitnami/kafka:3.3.1
+    image: soldevelo/kafka:3.3.2
     networks:
       - symphony-net
     depends_on:
